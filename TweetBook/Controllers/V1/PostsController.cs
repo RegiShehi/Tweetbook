@@ -54,6 +54,17 @@ namespace TweetBook.Controllers.V1
             return Ok(post);
         }
 
+        [HttpDelete(ApiRoutes.Posts.Delete)]
+        public IActionResult Delete([FromRoute]Guid id)
+        {
+            var post = _postService.DeletePost(id);
+
+            if (post)
+                return NoContent();
+
+            return NotFound();
+        }
+
         [HttpPost(ApiRoutes.Posts.Create)]
         public IActionResult Create([FromBody]CreatePostRequest postRequest)
         {
