@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TweetBook.Domain;
 
 namespace TweetBook.Data
 {
@@ -9,6 +10,8 @@ namespace TweetBook.Data
         {
 
         }
+
+        public DbSet<Post> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
