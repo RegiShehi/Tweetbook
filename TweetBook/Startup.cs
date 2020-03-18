@@ -32,9 +32,9 @@ namespace TweetBook
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             var swaggerOptions = new SwaggerOptions();
