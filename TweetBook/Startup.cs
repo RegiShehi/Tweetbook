@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TweetBook.Options;
 using TweetBook.Installers;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace TweetBook
 {
@@ -30,6 +33,24 @@ namespace TweetBook
             {
                 app.UseDeveloperExceptionPage();
             }
+            //else
+            //{
+            //    app.UseExceptionHandler(builder =>
+            //    {
+            //        builder.Run(async context =>
+            //        {
+            //            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            //            var error = context.Features.Get<IExceptionHandlerFeature>();
+
+            //            if (error != null)
+            //            {
+            //                context.Response.AddApplicationError(error.Error.Message);
+            //                await context.Response.WriteAsync(error.Error.Message);
+            //            }
+            //        });
+            //    });
+            //}
 
             app.UseHttpsRedirection();
             app.UseRouting();
