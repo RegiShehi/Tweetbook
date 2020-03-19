@@ -56,7 +56,7 @@ namespace TweetBook.Installers
                     {
                         new OpenApiSecurityScheme{
                             Reference = new OpenApiReference{
-                                Id = "Authorization", //The name of the previously defined security scheme.
+                                Id = "Bearer", //The name of the previously defined security scheme.
                                 Type = ReferenceType.SecurityScheme
                             }
                         }, new List<string>()
