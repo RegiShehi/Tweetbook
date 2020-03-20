@@ -17,7 +17,6 @@ namespace TweetBook.Installers
 
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<ITokenGenerator, TokenGenerator>();
         }
     }
 }
