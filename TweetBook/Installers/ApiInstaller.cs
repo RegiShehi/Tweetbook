@@ -43,6 +43,8 @@ namespace TweetBook.Installers
                 x.TokenValidationParameters = tokenValidationParameters;
             });
 
+            services.AddAuthorization();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tweetbook API", Version = "v1" });

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,10 +19,12 @@ namespace TweetBook.Controllers.V1
     public class PostsController : ControllerBase
     {
         private readonly IPostService _postService;
+        private readonly ITagService _tagService;
 
-        public PostsController(IPostService postService)
+        public PostsController(IPostService postService, ITagService tagService)
         {
             _postService = postService;
+            _tagService = tagService;
         }
 
         [HttpGet(ApiRoutes.Posts.Get)]
@@ -54,6 +57,19 @@ namespace TweetBook.Controllers.V1
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var locationUri = baseUrl + "/" + ApiRoutes.Posts.Get.Replace("{id}", post.Id.ToString());
+
+            var tags = new List<Tag>();
+
+            postRequest.Tags.ForEach(tag =>
+            {
+                tags.Add(new Tag
+                {
+                    PostId = post.Id,
+                    TagName = tag
+                });
+            });
+
+            await _tagService.CreateTagsAsync(tags);
 
             var response = new PostResponse { Id = post.Id };
 
