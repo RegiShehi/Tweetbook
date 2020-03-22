@@ -13,7 +13,10 @@ namespace TweetBook.Installers
         {
             services.AddDbContext<DataContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<DataContext>();
+            services
+                .AddIdentityCore<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>();
 
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IIdentityService, IdentityService>();

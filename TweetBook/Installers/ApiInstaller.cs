@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +31,11 @@ namespace TweetBook.Installers
                 ValidateLifetime = true
             };
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            });
+
             services.AddSingleton(tokenValidationParameters);
 
             services.AddAuthentication(x =>
@@ -43,10 +49,7 @@ namespace TweetBook.Installers
                 x.TokenValidationParameters = tokenValidationParameters;
             });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("TagViewer", builder => builder.RequireClaim("tags-view", "true"));
-            });
+            services.AddAuthorization();
 
             services.AddSwaggerGen(c =>
             {
