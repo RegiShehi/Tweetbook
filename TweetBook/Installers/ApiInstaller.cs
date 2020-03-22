@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Text;
+using TweetBook.Authorization;
 using TweetBook.Options;
 
 namespace TweetBook.Installers
@@ -49,7 +51,15 @@ namespace TweetBook.Installers
                 x.TokenValidationParameters = tokenValidationParameters;
             });
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("MustWorkForRegi", policy =>
+                {
+                    policy.AddRequirements(new WorksForCompanyRequirement("regi.com"));
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, WorksForCompanyHandler>();
 
             services.AddSwaggerGen(c =>
             {
