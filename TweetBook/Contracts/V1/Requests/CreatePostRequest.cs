@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TweetBook.Domain;
+﻿using System.Collections.Generic;
 
 namespace TweetBook.Contracts.V1.Requests
 {

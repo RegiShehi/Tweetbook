@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Text;
 using TweetBook.Authorization;
 using TweetBook.Options;
+using FluentValidation.AspNetCore;
+using TweetBook.Filters;
 
 namespace TweetBook.Installers
 {
@@ -21,7 +23,15 @@ namespace TweetBook.Installers
 
             services.AddSingleton(jwtOptions);
 
-            services.AddControllers();
+            services
+                .AddControllers(options =>
+                {
+                    options.Filters.Add<ValidationFilter>();
+                })
+                .AddFluentValidation(config =>
+                {
+                    config.RegisterValidatorsFromAssemblyContaining<Startup>();
+                });
 
             var tokenValidationParameters = new TokenValidationParameters
             {
