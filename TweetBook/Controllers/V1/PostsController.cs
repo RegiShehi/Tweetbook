@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +22,13 @@ namespace TweetBook.Controllers.V1
     {
         private readonly IPostService _postService;
         private readonly ITagService _tagService;
+        private readonly IMapper _mapper;
 
-        public PostsController(IPostService postService, ITagService tagService)
+        public PostsController(IPostService postService, ITagService tagService, IMapper mapper)
         {
             _postService = postService;
             _tagService = tagService;
+            _mapper = mapper;
         }
 
         [HttpGet(ApiRoutes.Posts.Get)]
@@ -35,13 +39,15 @@ namespace TweetBook.Controllers.V1
             if (post == null)
                 return NotFound();
 
-            return Ok(post);
+            return Ok(_mapper.Map<PostResponse>(post));
         }
 
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _postService.GetPostsAsync());
+            var posts = await _postService.GetPostsAsync();
+
+            return Ok(_mapper.Map<List<PostResponse>>(posts));
         }
 
         [HttpPost(ApiRoutes.Posts.Create)]
@@ -71,7 +77,7 @@ namespace TweetBook.Controllers.V1
 
             await _tagService.CreateTagsAsync(tags);
 
-            var response = new PostResponse { Id = post.Id };
+            var response = _mapper.Map<PostResponse>(post);
 
             return Created(locationUri, response);
         }
@@ -90,7 +96,7 @@ namespace TweetBook.Controllers.V1
             var updated = await _postService.UpdatePostAsync(post);
 
             if (updated)
-                return Ok(post);
+                return Ok(_mapper.Map<PostResponse>(post));
 
             return NotFound();
         }
